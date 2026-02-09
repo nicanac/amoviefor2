@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation'
-import { getProfile, logout } from '@/actions/auth'
+import { getProfile } from '@/actions/auth'
 import { getActiveSession, getSessionMovies } from '@/actions/session'
 import { getSessionMatches } from '@/actions/swipe'
 import { MatchResultClient } from '@/components/match-result-client'
+import { ForceLogout } from '@/components/force-logout'
 
 export default async function MatchPage() {
   const profile = await getProfile()
   if (!profile) {
-    await logout()
-    redirect('/login')
+    return <ForceLogout />
   }
 
   const session = await getActiveSession()

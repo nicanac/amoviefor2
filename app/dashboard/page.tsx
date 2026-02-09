@@ -1,14 +1,13 @@
-import { redirect } from 'next/navigation'
-import { getProfile, logout } from '@/actions/auth'
+import { getProfile } from '@/actions/auth'
 import { getActiveCouple } from '@/actions/couple'
 import { getActiveSession } from '@/actions/session'
 import { DashboardClient } from '@/components/dashboard-client'
+import { ForceLogout } from '@/components/force-logout'
 
 export default async function DashboardPage() {
   const profile = await getProfile()
   if (!profile) {
-    await logout()
-    redirect('/login')
+    return <ForceLogout />
   }
 
   const couple = await getActiveCouple()

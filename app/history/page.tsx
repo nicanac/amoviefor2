@@ -1,13 +1,12 @@
-import { redirect } from 'next/navigation'
-import { getProfile, logout } from '@/actions/auth'
+import { getProfile } from '@/actions/auth'
 import { getMatchHistory } from '@/actions/movies'
 import { HistoryClient } from '@/components/history-client'
+import { ForceLogout } from '@/components/force-logout'
 
 export default async function HistoryPage() {
   const profile = await getProfile()
   if (!profile) {
-    await logout()
-    redirect('/login')
+    return <ForceLogout />
   }
 
   const matches = await getMatchHistory()

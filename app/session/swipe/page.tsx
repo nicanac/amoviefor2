@@ -1,14 +1,14 @@
 import { redirect } from 'next/navigation'
 import { getActiveSession, getSessionMovies } from '@/actions/session'
 import { getUserSwipes } from '@/actions/swipe'
-import { getProfile, logout } from '@/actions/auth'
+import { getProfile } from '@/actions/auth'
 import { SwipeClient } from '@/components/swipe-client'
+import { ForceLogout } from '@/components/force-logout'
 
 export default async function SwipePage() {
   const profile = await getProfile()
   if (!profile) {
-    await logout()
-    redirect('/login')
+    return <ForceLogout />
   }
 
   const session = await getActiveSession()

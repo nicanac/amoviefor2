@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation'
 import { getActiveSession, getQuestions } from '@/actions/session'
 import { QuizClient } from '@/components/quiz-client'
-import { getProfile, logout } from '@/actions/auth'
+import { getProfile } from '@/actions/auth'
+import { ForceLogout } from '@/components/force-logout'
 
 export default async function QuizPage() {
   const profile = await getProfile()
   if (!profile) {
-    await logout()
-    redirect('/login')
+    return <ForceLogout />
   }
 
   const session = await getActiveSession()

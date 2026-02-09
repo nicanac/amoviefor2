@@ -1,13 +1,12 @@
-import { redirect } from 'next/navigation'
-import { getProfile, logout } from '@/actions/auth'
+import { getProfile } from '@/actions/auth'
 import { getActiveCouple } from '@/actions/couple'
 import { InviteClient } from '@/components/invite-client'
+import { ForceLogout } from '@/components/force-logout'
 
 export default async function InvitePage() {
   const profile = await getProfile()
   if (!profile) {
-    await logout()
-    redirect('/login')
+    return <ForceLogout />
   }
 
   const couple = await getActiveCouple()
