@@ -263,9 +263,20 @@ export type Database = {
     };
     Enums: {
       couple_status: "pending" | "active" | "dissolved";
-      session_status: "answering" | "matching" | "swiping" | "completed" | "expired";
+      session_status:
+        | "answering"
+        | "matching"
+        | "swiping"
+        | "completed"
+        | "expired";
       question_type: "single_choice" | "multi_choice" | "slider";
-      question_category: "genre" | "mood" | "era" | "length" | "language" | "rating";
+      question_category:
+        | "genre"
+        | "mood"
+        | "era"
+        | "length"
+        | "language"
+        | "rating";
       swipe_direction: "right" | "left";
       seen_movie_source: "auto" | "manual";
     };

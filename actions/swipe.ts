@@ -68,9 +68,7 @@ async function checkForMatch(
   if (!couple) return null;
 
   const partnerId =
-    couple.user1_id === currentUserId
-      ? couple.user2_id
-      : couple.user1_id;
+    couple.user1_id === currentUserId ? couple.user2_id : couple.user1_id;
 
   if (!partnerId) return null;
 

@@ -51,6 +51,38 @@
         "Scoring uses geometric mean to ensure movies appeal to BOTH users."
       ],
       "status": "complete"
+    },
+    {
+      "id": 5,
+      "timestamp": "2026-02-09T00:10:00Z",
+      "phase": "2-implementation",
+      "action": "FULL_SCAFFOLD",
+      "description": "Complete app scaffolded: Next.js 16.1.6, all types, Supabase clients, middleware, TMDB client, scoring engine, 9 SQL migrations, 5 server actions, all pages, 6 client components, TMDB API proxy route, design system.",
+      "status": "complete"
+    },
+    {
+      "id": 6,
+      "timestamp": "2026-02-09T00:15:00Z",
+      "phase": "2-implementation",
+      "action": "BUILD_FIX",
+      "description": "Fixed 8 TypeScript build errors: Supabase Relationships arrays, Json type casts, embedded relationship queries refactored to separate queries, form action return types (useActionState), genre Json→string[] casts, duplicate declarations.",
+      "status": "complete"
+    },
+    {
+      "id": 7,
+      "timestamp": "2026-02-09T00:20:00Z",
+      "phase": "3-deployment",
+      "action": "GIT_PUSH",
+      "description": "Initial commit (117 files, 21k+ insertions) pushed to nicanac/amoviefor2 on GitHub.",
+      "status": "complete"
+    },
+    {
+      "id": 8,
+      "timestamp": "2026-02-09T00:25:00Z",
+      "phase": "3-deployment",
+      "action": "VERCEL_DEPLOY",
+      "description": "Deployed to Vercel production at https://amoviefor2.vercel.app. All 4 env vars configured (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, TMDB_API_KEY, TMDB_ACCESS_TOKEN).",
+      "status": "complete"
     }
   ]
 }

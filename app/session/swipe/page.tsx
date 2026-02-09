@@ -1,12 +1,15 @@
 import { redirect } from 'next/navigation'
 import { getActiveSession, getSessionMovies } from '@/actions/session'
 import { getUserSwipes } from '@/actions/swipe'
-import { getProfile } from '@/actions/auth'
+import { getProfile, logout } from '@/actions/auth'
 import { SwipeClient } from '@/components/swipe-client'
 
 export default async function SwipePage() {
   const profile = await getProfile()
-  if (!profile) redirect('/login')
+  if (!profile) {
+    await logout()
+    redirect('/login')
+  }
 
   const session = await getActiveSession()
   if (!session) redirect('/dashboard')

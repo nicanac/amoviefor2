@@ -183,9 +183,7 @@ export async function generateMovieRecommendations(sessionId: string) {
   const { data: seenMovies } = await supabase
     .from("seen_movies")
     .select("tmdb_id")
-    .or(
-      `user_id.eq.${couple.user1_id},user_id.eq.${couple.user2_id}`,
-    );
+    .or(`user_id.eq.${couple.user1_id},user_id.eq.${couple.user2_id}`);
 
   const seenTmdbIds = new Set((seenMovies || []).map((m) => m.tmdb_id));
 

@@ -1,11 +1,14 @@
 import { redirect } from 'next/navigation'
 import { getActiveSession, getQuestions } from '@/actions/session'
 import { QuizClient } from '@/components/quiz-client'
-import { getProfile } from '@/actions/auth'
+import { getProfile, logout } from '@/actions/auth'
 
 export default async function QuizPage() {
   const profile = await getProfile()
-  if (!profile) redirect('/login')
+  if (!profile) {
+    await logout()
+    redirect('/login')
+  }
 
   const session = await getActiveSession()
   if (!session) redirect('/dashboard')

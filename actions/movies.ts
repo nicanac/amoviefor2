@@ -111,9 +111,7 @@ export async function getMatchHistory() {
     .select("*")
     .in("id", movieIds);
 
-  const movieMap = new Map(
-    (sessionMovies || []).map((sm) => [sm.id, sm]),
-  );
+  const movieMap = new Map((sessionMovies || []).map((sm) => [sm.id, sm]));
 
   // 5. Join manually
   return matches.map((m) => ({

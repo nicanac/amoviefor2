@@ -1,12 +1,15 @@
 import { redirect } from 'next/navigation'
-import { getProfile } from '@/actions/auth'
+import { getProfile, logout } from '@/actions/auth'
 import { getActiveSession, getSessionMovies } from '@/actions/session'
 import { getSessionMatches } from '@/actions/swipe'
 import { MatchResultClient } from '@/components/match-result-client'
 
 export default async function MatchPage() {
   const profile = await getProfile()
-  if (!profile) redirect('/login')
+  if (!profile) {
+    await logout()
+    redirect('/login')
+  }
 
   const session = await getActiveSession()
   // Also check for most recent completed session

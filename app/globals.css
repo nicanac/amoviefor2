@@ -68,10 +68,13 @@ body {
 
 /* Subtle dot pattern background */
 .bg-pattern {
-  background-image: radial-gradient(#8c2bee 1px, transparent 1px),
+  background-image:
+    radial-gradient(#8c2bee 1px, transparent 1px),
     radial-gradient(#8c2bee 1px, transparent 1px);
   background-size: 40px 40px;
-  background-position: 0 0, 20px 20px;
+  background-position:
+    0 0,
+    20px 20px;
   opacity: 0.05;
 }
 
@@ -99,8 +102,12 @@ body {
 
 /* Film reel animation */
 @keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
@@ -108,10 +115,16 @@ body {
 
 /* Swipe card animations */
 @keyframes swipe-right {
-  to { transform: translateX(150%) rotate(20deg); opacity: 0; }
+  to {
+    transform: translateX(150%) rotate(20deg);
+    opacity: 0;
+  }
 }
 @keyframes swipe-left {
-  to { transform: translateX(-150%) rotate(-20deg); opacity: 0; }
+  to {
+    transform: translateX(-150%) rotate(-20deg);
+    opacity: 0;
+  }
 }
 .animate-swipe-right {
   animation: swipe-right 0.4s ease-out forwards;
@@ -122,8 +135,13 @@ body {
 
 /* Pulse glow for match celebration */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(140, 43, 238, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(140, 43, 238, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(140, 43, 238, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(140, 43, 238, 0.6);
+  }
 }
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
