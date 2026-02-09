@@ -1,0 +1,56 @@
+{
+  "project": "amoviefor2",
+  "created": "2026-02-09",
+  "entries": [
+    {
+      "id": 1,
+      "timestamp": "2026-02-09T00:00:00Z",
+      "phase": "0-initialization",
+      "action": "WORKSPACE_INIT",
+      "description": "Created .vibe/ workspace memory: nexus.md, task_plan.md, logbook.json, architecture.md",
+      "decision": "B.L.A.S.T. protocol activated with A.N.T. 3-layer architecture.",
+      "status": "complete"
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-02-09T00:01:00Z",
+      "phase": "0-initialization",
+      "action": "DISCOVERY_COMPLETE",
+      "description": "5 Discovery Questions answered by user. North Star, integrations, source of truth, payload, and behavior defined.",
+      "decision": "Project is a couple movie matcher: questions → TMDB recommendations → swipe → match. Stack: Next.js 16.1 + Supabase + TMDB + Vercel. Mobile-first.",
+      "status": "complete"
+    },
+    {
+      "id": 3,
+      "timestamp": "2026-02-09T00:02:00Z",
+      "phase": "1-blueprint",
+      "action": "SCHEMA_DESIGN",
+      "description": "Defined 9 canonical data schemas in nexus.md: profiles, couples, questions, sessions, user_answers, session_movies, swipes, matches, seen_movies.",
+      "decisions": [
+        "Partner code (6-char) for couple formation instead of email invite — simpler UX.",
+        "session_movies caches TMDB data — avoids re-fetching during swipe phase.",
+        "match_score (0.0–1.0) computed server-side from both users' answers.",
+        "seen_movies has 'source' field: 'auto' (post-match) vs 'manual' (user-marked).",
+        "Sessions expire after 24h to prevent stale data.",
+        "Swipe choices hidden from partner until both complete — prevents bias."
+      ],
+      "status": "complete"
+    },
+    {
+      "id": 4,
+      "timestamp": "2026-02-09T00:03:00Z",
+      "phase": "1-blueprint",
+      "action": "TECH_RESEARCH",
+      "description": "Researched Next.js 16.1 (App Router, Server Components, Server Actions) and Supabase (Auth, RLS, Realtime) documentation.",
+      "decisions": [
+        "Use Next.js App Router with Server Components for data fetching.",
+        "Use Server Actions for mutations (swipes, answers, etc.).",
+        "Use Supabase RLS to enforce data isolation per couple.",
+        "Use Supabase Realtime for partner notifications (answer complete, swipe match).",
+        "Supabase trigger auto-creates profile on auth.users INSERT.",
+        "Scoring uses geometric mean to ensure movies appeal to BOTH users."
+      ],
+      "status": "complete"
+    }
+  ]
+}

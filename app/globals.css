@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+/* =============================================================================
+   Design Tokens — from Stitch mockup
+   ============================================================================= */
+
+@theme inline {
+  /* Colors */
+  --color-primary: #8c2bee;
+  --color-primary-dark: #6b1cb0;
+  --color-primary-light: #a855f7;
+  --color-bg-light: #f7f6f8;
+  --color-bg-dark: #191022;
+  --color-surface-dark: #1e1e1e;
+  --color-surface-light: #ffffff;
+  --color-card-dark: #2a1f36;
+  --color-card-darker: #251b2e;
+  --color-zone-top: #20152b;
+  --color-zone-bottom: #150d1c;
+
+  /* Fonts */
+  --font-display: "Plus Jakarta Sans", sans-serif;
+
+  /* Border radius */
+  --radius-sm: 0.5rem;
+  --radius-DEFAULT: 1rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
+  --radius-2xl: 2.5rem;
+  --radius-3xl: 3rem;
+}
+
+/* =============================================================================
+   Base Styles
+   ============================================================================= */
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-bg-dark);
+  color: #ffffff;
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: white;
+}
+
+/* =============================================================================
+   Custom Utilities
+   ============================================================================= */
+
+/* Hide scrollbar for clean mobile look */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Subtle dot pattern background */
+.bg-pattern {
+  background-image: radial-gradient(#8c2bee 1px, transparent 1px),
+    radial-gradient(#8c2bee 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+  opacity: 0.05;
+}
+
+/* Glow effect */
+.glow-primary {
+  box-shadow: 0 4px 20px rgba(140, 43, 238, 0.4);
+}
+
+/* Match badge color tiers */
+.match-excellent {
+  color: #8c2bee;
+  background: rgba(140, 43, 238, 0.15);
+  border-color: rgba(140, 43, 238, 0.3);
+}
+.match-great {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+.match-good {
+  color: #eab308;
+  background: rgba(234, 179, 8, 0.12);
+  border-color: rgba(234, 179, 8, 0.25);
+}
+
+/* Film reel animation */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+/* Swipe card animations */
+@keyframes swipe-right {
+  to { transform: translateX(150%) rotate(20deg); opacity: 0; }
+}
+@keyframes swipe-left {
+  to { transform: translateX(-150%) rotate(-20deg); opacity: 0; }
+}
+.animate-swipe-right {
+  animation: swipe-right 0.4s ease-out forwards;
+}
+.animate-swipe-left {
+  animation: swipe-left 0.4s ease-out forwards;
+}
+
+/* Pulse glow for match celebration */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(140, 43, 238, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(140, 43, 238, 0.6); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
