@@ -83,6 +83,172 @@
       "action": "VERCEL_DEPLOY",
       "description": "Deployed to Vercel production at https://amoviefor2.vercel.app. All 4 env vars configured (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, TMDB_API_KEY, TMDB_ACCESS_TOKEN).",
       "status": "complete"
+    },
+    {
+      "id": 9,
+      "timestamp": "2026-02-11T10:30:00Z",
+      "phase": "4-refinement",
+      "action": "SELF_ANNEALING_LOGGER",
+      "description": "Created lib/logger.ts — Self-Annealing logger with logEntry(), logError(), logResolution(), withTracing(), getRecentErrors(). Writes structured traces to .vibe/logbook.json for AI agent self-healing.",
+      "status": "complete"
+    },
+    {
+      "id": 10,
+      "timestamp": "2026-02-11T10:31:00Z",
+      "phase": "4-refinement",
+      "action": "ZOD_VALIDATION",
+      "description": "Created lib/validations.ts with Zod schemas for all Server Actions (auth, couple, session, swipe, movies). Updated all 5 action files to validate inputs before DB calls. Eliminates unsafe 'as Json' casts and 'any' types.",
+      "decisions": [
+        "Zod chosen over io-ts for simpler API and better Next.js support.",
+        "validate() utility returns {data} | {error} for consistent action patterns.",
+        "All schemas enforce strict types: UUID format, partner code format, answer union types."
+      ],
+      "status": "complete"
+    },
+    {
+      "id": 11,
+      "timestamp": "2026-02-11T10:32:00Z",
+      "phase": "4-refinement",
+      "action": "REALTIME_HOOK",
+      "description": "Created lib/use-realtime-session.ts — Supabase Realtime hook subscribing to user_answers (partner progress), sessions (status changes), matches (instant match), and swipes (partner activity). Replaces polling-based partner detection.",
+      "decisions": [
+        "Used stable callback refs to avoid re-subscribing on every render.",
+        "Partner swipe events don't reveal direction (privacy invariant preserved).",
+        "Connection state (isConnected, connectionError) exposed for UI feedback."
+      ],
+      "status": "complete"
+    },
+    {
+      "id": 12,
+      "timestamp": "2026-02-11T10:33:00Z",
+      "phase": "4-refinement",
+      "action": "ENV_GUARD",
+      "description": "Created tools/verify-env.ts — Environment verification tool. Checks all required env vars (SUPABASE_URL, ANON_KEY, SERVICE_ROLE_KEY, TMDB_API_KEY) with URL validation. Runnable via CLI: npx tsx tools/verify-env.ts.",
+      "status": "complete"
+    },
+    {
+      "id": 13,
+      "timestamp": "2026-02-11T10:34:00Z",
+      "phase": "4-refinement",
+      "action": "LINT_CLEANUP",
+      "description": "Fixed all ESLint errors and warnings across the codebase (0 errors, 0 warnings). Fixed pre-existing issues: stopPolling hoisting, 'as any' casts, unused imports, unused props.",
+      "status": "complete"
+    },
+    {
+      "id": 14,
+      "timestamp": "2026-02-11T11:09:55.267Z",
+      "phase": "2-implementation",
+      "action": "ERROR_joinCouple",
+      "description": "Error in joinCouple: No pending invite from this partner",
+      "status": "error",
+      "trace": {
+        "message": "No pending invite from this partner",
+        "stack": "Error: No pending invite from this partner\n    at joinCouple (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\[root-of-the-server]__455ddb4c._.js:502:176)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async executeActionAndPrepareForRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:3803)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:1109\n    at async handleAction (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:34:23616)\n    at async renderToHTMLOrFlightImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:41:42130)\n    at async doRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:2970:28)\n    at async AppPageRouteModule.handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:43:64241)\n    at async handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:3176:32)\n    at async Module.handler (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:3547:20)\n    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1442:9)\n    at async DevServer.renderPageComponent (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1494:24)\n    at async DevServer.renderToResponseImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1544:32)\n    at async DevServer.pipeImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1038:25)\n    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\next-server.js:395:17)\n    at async DevServer.handleRequestImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:929:17)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:387:20\n    at async Span.traceAsyncFn (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\trace\\trace.js:157:20)\n    at async DevServer.handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:383:24)\n    at async invokeRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:248:21)\n    at async handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:447:24)\n    at async requestHandlerImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:496:13)\n    at async Server.requestListener (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\start-server.js:226:13)",
+        "context": {
+          "partnerCode": "5PXF4M"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "timestamp": "2026-02-11T11:35:38.150Z",
+      "phase": "2-implementation",
+      "action": "ERROR_joinCouple",
+      "description": "Error in joinCouple: No pending invite from this partner",
+      "status": "error",
+      "trace": {
+        "message": "No pending invite from this partner",
+        "stack": "Error: No pending invite from this partner\n    at joinCouple (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\[root-of-the-server]__455ddb4c._.js:502:176)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async executeActionAndPrepareForRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:3803)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:1109\n    at async handleAction (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:34:23616)\n    at async renderToHTMLOrFlightImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:41:42130)\n    at async doRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:2970:28)\n    at async AppPageRouteModule.handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:43:64241)\n    at async handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:3176:32)\n    at async Module.handler (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:3547:20)\n    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1442:9)\n    at async DevServer.renderPageComponent (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1494:24)\n    at async DevServer.renderToResponseImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1544:32)\n    at async DevServer.pipeImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1038:25)\n    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\next-server.js:395:17)\n    at async DevServer.handleRequestImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:929:17)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:387:20\n    at async Span.traceAsyncFn (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\trace\\trace.js:157:20)\n    at async DevServer.handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:383:24)\n    at async invokeRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:248:21)\n    at async handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:447:24)\n    at async requestHandlerImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:496:13)\n    at async Server.requestListener (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\start-server.js:226:13)",
+        "context": {
+          "partnerCode": "5PXF4M"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "timestamp": "2026-02-11T15:24:46.722Z",
+      "phase": "2-implementation",
+      "action": "ERROR_joinCouple",
+      "description": "Error in joinCouple: No pending invite from this partner",
+      "status": "error",
+      "trace": {
+        "message": "No pending invite from this partner",
+        "stack": "Error: No pending invite from this partner\n    at joinCouple (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\[root-of-the-server]__455ddb4c._.js:502:176)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async executeActionAndPrepareForRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:3803)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:1109\n    at async handleAction (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:34:23616)\n    at async renderToHTMLOrFlightImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:41:42130)\n    at async doRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:2970:28)\n    at async AppPageRouteModule.handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:43:64241)\n    at async handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:3176:32)\n    at async Module.handler (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_a6456fe3._.js:3547:20)\n    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1442:9)\n    at async DevServer.renderPageComponent (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1494:24)\n    at async DevServer.renderToResponseImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1544:32)\n    at async DevServer.pipeImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1038:25)\n    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\next-server.js:395:17)\n    at async DevServer.handleRequestImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:929:17)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:387:20\n    at async Span.traceAsyncFn (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\trace\\trace.js:157:20)\n    at async DevServer.handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:383:24)\n    at async invokeRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:248:21)\n    at async handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:447:24)\n    at async requestHandlerImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:496:13)\n    at async Server.requestListener (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\start-server.js:226:13)",
+        "context": {
+          "partnerCode": "5PXF4M"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "timestamp": "2026-02-11T16:00:00Z",
+      "phase": "4-refinement",
+      "action": "FEATURE_UPDATE",
+      "description": "Disabled swiping phase. Movies are now displayed immediately after generation. Updated architecture.md, nexus.md, and task_plan.md to reflect this change.",
+      "decisions": [
+        "Removed swiping phase to simplify user flow.",
+        "Directly transition session status from 'matching' to 'completed'.",
+        "Display all 'session_movies' as results instead of requiring mutual right swipes."
+      ],
+      "status": "complete"
+    },
+    {
+      "id": 18,
+      "timestamp": "2026-02-11T15:59:19.532Z",
+      "phase": "2-implementation",
+      "action": "ERROR_joinCouple",
+      "description": "Error in joinCouple: Cannot couple with yourself",
+      "status": "error",
+      "trace": {
+        "message": "Cannot couple with yourself",
+        "stack": "Error: Cannot couple with yourself\n    at joinCouple (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\[root-of-the-server]__455ddb4c._.js:502:176)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async executeActionAndPrepareForRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:3803)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:1109\n    at async handleAction (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:34:23616)\n    at async renderToHTMLOrFlightImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:41:42130)\n    at async doRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_01a443ca._.js:2970:28)\n    at async AppPageRouteModule.handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:43:64241)\n    at async handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_01a443ca._.js:3176:32)\n    at async Module.handler (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_01a443ca._.js:3547:20)\n    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1442:9)\n    at async DevServer.renderPageComponent (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1494:24)\n    at async DevServer.renderToResponseImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1544:32)\n    at async DevServer.pipeImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1038:25)\n    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\next-server.js:395:17)\n    at async DevServer.handleRequestImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:929:17)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:387:20\n    at async Span.traceAsyncFn (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\trace\\trace.js:157:20)\n    at async DevServer.handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:383:24)\n    at async invokeRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:248:21)\n    at async handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:447:24)\n    at async requestHandlerImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:496:13)\n    at async Server.requestListener (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\start-server.js:226:13)",
+        "context": {
+          "partnerCode": "AH3N5T"
+        }
+      }
+    },
+    {
+      "id": 19,
+      "timestamp": "2026-02-11T15:59:31.267Z",
+      "phase": "2-implementation",
+      "action": "ERROR_joinCouple",
+      "description": "Error in joinCouple: Cannot couple with yourself",
+      "status": "error",
+      "trace": {
+        "message": "Cannot couple with yourself",
+        "stack": "Error: Cannot couple with yourself\n    at joinCouple (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\[root-of-the-server]__455ddb4c._.js:502:176)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async executeActionAndPrepareForRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:3803)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:36:1109\n    at async handleAction (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:34:23616)\n    at async renderToHTMLOrFlightImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:41:42130)\n    at async doRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_01a443ca._.js:2970:28)\n    at async AppPageRouteModule.handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\compiled\\next-server\\app-page-turbo.runtime.dev.js:43:64241)\n    at async handleResponse (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_01a443ca._.js:3176:32)\n    at async Module.handler (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\.next\\dev\\server\\chunks\\ssr\\node_modules_next_dist_01a443ca._.js:3547:20)\n    at async DevServer.renderToResponseWithComponentsImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1442:9)\n    at async DevServer.renderPageComponent (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1494:24)\n    at async DevServer.renderToResponseImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1544:32)\n    at async DevServer.pipeImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:1038:25)\n    at async NextNodeServer.handleCatchallRenderRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\next-server.js:395:17)\n    at async DevServer.handleRequestImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\base-server.js:929:17)\n    at async C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:387:20\n    at async Span.traceAsyncFn (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\trace\\trace.js:157:20)\n    at async DevServer.handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\dev\\next-dev-server.js:383:24)\n    at async invokeRender (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:248:21)\n    at async handleRequest (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:447:24)\n    at async requestHandlerImpl (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\router-server.js:496:13)\n    at async Server.requestListener (C:\\Users\\bruye\\OneDrive\\Documents\\dev\\amoviefor2\\node_modules\\next\\dist\\server\\lib\\start-server.js:226:13)",
+        "context": {
+          "partnerCode": "AH3N5T"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "timestamp": "2026-02-11T17:00:00Z",
+      "phase": "4-refinement",
+      "action": "PROFILE_UPDATE",
+      "description": "Implemented User Requests: Profile Badge in Dashboard, Repositioned Logout Button, Created /profile page, Friend List (Recent Partners), and Quick Switch functionality.",
+      "decisions": [
+        "Created ProfileBadge component for dashboard header.",
+        "Moved Logout button next to ProfileBadge.",
+        "Implemented getRecentPartners and quickConnect server actions.",
+        "Quick Switch bypasses partner code by dissolving current couple and creating a new active couple with the selected friend."
+      ],
+      "status": "complete"
+    },
+    {
+      "id": 21,
+      "timestamp": "2026-02-11T17:15:00Z",
+      "phase": "4-refinement",
+      "action": "MATCHING_REFINEMENT",
+      "description": "Refined matching logic filters and scoring. Removed language category. Forced multi_choice type for better UI handling and implemented inclusive logic for rating/era/length. Adjusted scoring weights.",
+      "decisions": [
+        "Removed 'language' from question set and filters.",
+        "Injected default options for rating/length/era to support multi_choice UI.",
+        "Scoring uses inclusive logic (min rating, union of time periods) to broaden results.",
+        "Weights redistributed: Genre 0.30, Mood 0.20."
+      ],
+      "status": "complete"
     }
   ]
 }
