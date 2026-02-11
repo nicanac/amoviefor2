@@ -49,6 +49,9 @@ export async function discoverMovies(
     params.set("with_runtime.gte", String(filters["with_runtime.gte"]));
   if (filters["with_runtime.lte"] !== undefined)
     params.set("with_runtime.lte", String(filters["with_runtime.lte"]));
+  if (filters.with_watch_providers)
+    params.set("with_watch_providers", filters.with_watch_providers);
+  if (filters.watch_region) params.set("watch_region", filters.watch_region);
 
   const res = await fetch(`${TMDB_BASE_URL}/discover/movie?${params}`, {
     headers: getHeaders(),
@@ -67,10 +70,13 @@ export async function discoverMovies(
 export async function getMovieDetail(
   movieId: number,
 ): Promise<TMDBMovieDetail> {
-  const res = await fetch(`${TMDB_BASE_URL}/movie/${movieId}?language=en-US`, {
-    headers: getHeaders(),
-    next: { revalidate: 86400 }, // Cache for 24 hours
-  });
+  const res = await fetch(
+    `${TMDB_BASE_URL}/movie/${movieId}?language=en-US&append_to_response=videos`,
+    {
+      headers: getHeaders(),
+      next: { revalidate: 86400 }, // Cache for 24 hours
+    },
+  );
 
   if (!res.ok) throw new Error(`TMDB movie detail failed: ${res.status}`);
 
@@ -107,4 +113,38 @@ export function getBackdropUrl(
 ): string {
   if (!path) return "/placeholder-backdrop.svg";
   return `${TMDB_IMAGE_BASE}/${size}${path}`;
+}
+
+// --- Get Movie Watch Providers ---
+
+export interface TMDBWatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string | null;
+}
+
+export interface TMDBWatchProvidersResponse {
+  id: number;
+  results?: {
+    [countryCode: string]: {
+      link?: string;
+      flatrate?: TMDBWatchProvider[]; // Subscription streaming
+      rent?: TMDBWatchProvider[]; // Digital rental
+      buy?: TMDBWatchProvider[]; // Digital purchase
+      free?: TMDBWatchProvider[]; // Free with ads
+    };
+  };
+}
+
+export async function getMovieWatchProviders(
+  movieId: number,
+): Promise<TMDBWatchProvidersResponse> {
+  const res = await fetch(`${TMDB_BASE_URL}/movie/${movieId}/watch/providers`, {
+    headers: getHeaders(),
+    next: { revalidate: 86400 }, // Cache for 24 hours
+  });
+
+  if (!res.ok) throw new Error(`TMDB watch providers failed: ${res.status}`);
+
+  return res.json();
 }

@@ -119,8 +119,8 @@
 ```
 **Invariant:** Minimum 3 movies per session. Ordered by `match_score DESC`.
 
-### 3.7 `swipes`
-> Individual swipe actions during the swiping phase.
+### 3.7 `swipes` (DORMANT)
+> Individual swipe actions. **Currently unused** as swiping phase is disabled.
 
 ```json
 {
@@ -132,10 +132,9 @@
   "swiped_at": "timestamptz"
 }
 ```
-**Invariant:** One swipe per user per movie per session. Composite unique on `(session_id, user_id, session_movie_id)`.
 
-### 3.8 `matches`
-> Created automatically when BOTH users swipe right on the same movie.
+### 3.8 `matches` (DORMANT/BYPASSED)
+> Originally created when both users swipe right. **Currently bypassed**: The app displays all `session_movies` as "matches" immediately after generation.
 
 ```json
 {
@@ -145,7 +144,6 @@
   "matched_at": "timestamptz"
 }
 ```
-**Invariant:** A match exists IFF both users in the couple swiped `right` on the same `session_movie_id`.
 
 ### 3.9 `seen_movies`
 > Movies a user has already watched. Excluded from future recommendations.
@@ -168,17 +166,17 @@
 ### MUST ALWAYS:
 - [x] Require BOTH users to finish answering before generating movie list
 - [x] Show at least 3 movie propositions, ordered by `match_score DESC`
-- [x] Create a `match` record ONLY when both users swipe right
+- [ ] Create a `match` record ONLY when both users swipe right (BYPASSED)
 - [x] Exclude ALL movies in `seen_movies` for EITHER user from recommendations
-- [x] Allow users to mark movies as "already seen" during the swipe phase
+- [ ] Allow users to mark movies as "already seen" during the swipe phase (MOVED to Results)
 - [x] Enforce RLS on all tables — users can only access their own couple's data
-- [x] Use Supabase Realtime to notify partner when answers complete / swipe happens
+- [x] Use Supabase Realtime to notify partner when answers complete
 
 ### MUST NEVER:
 - [x] Recommend a movie already in `seen_movies` for either partner
 - [x] Allow a user to be in multiple active couples simultaneously
-- [x] Allow a user to swipe on a movie before both users have answered
-- [x] Expose one user's swipe choices to their partner before both have swiped
+- [ ] Allow a user to swipe on a movie before both users have answered (N/A)
+- [ ] Expose one user's swipe choices to their partner before both have swiped (N/A)
 - [x] Allow sessions to persist indefinitely (expire after 24h)
 
 ---
@@ -204,8 +202,8 @@
 | Questions      | Supabase DB        | Seeded, rarely changes                     |
 | Answers        | Supabase DB        | Per-session, per-user                      |
 | Movie Metadata | TMDB API           | Fetched live, cached in `session_movies`   |
-| Swipes         | Supabase DB        | Immutable after creation                   |
-| Matches        | Supabase DB        | Computed from swipes                       |
+| Swipes         | Supabase DB        | (Dormant) Immutable after creation         |
+| Matches        | Supabase DB        | (Dormant) Computed from swipes             |
 | Seen Movies    | Supabase DB        | User-managed + auto-added                  |
 
 ---
@@ -218,7 +216,7 @@
 | Session         | A single movie-finding round for a couple                        |
 | Partner Code    | 6-character invite code to form a couple                         |
 | Match Score     | 0.0–1.0 float indicating how well a movie fits both users' prefs |
-| Swipe Right     | User wants to watch this movie                                   |
-| Swipe Left      | User passes on this movie                                        |
-| Match           | Both users swiped right on the same movie                        |
+| Swipe Right     | (Disabled) User wants to watch this movie                        |
+| Swipe Left      | (Disabled) User passes on this movie                             |
+| Match           | (Current) Any movie recommended by the algorithm (top 3+)        |
 | Seen Movie      | A movie marked as already watched, excluded from recommendations |

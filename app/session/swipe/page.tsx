@@ -13,7 +13,25 @@ export default async function SwipePage() {
 
   const session = await getActiveSession()
   if (!session) redirect('/dashboard')
-  if (session.status !== 'swiping') redirect('/session/questions')
+  
+  // If still answering, go to questions
+  if (session.status === 'answering') redirect('/session/questions')
+  
+  // If matching, show waiting state (don't create loop)
+  if (session.status === 'matching') {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <div className="animate-pulse text-primary text-xl">Generating movie recommendations...</div>
+        <p className="text-slate-400 mt-2">This may take a few seconds</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="mt-4 px-4 py-2 bg-primary/20 rounded-lg text-primary hover:bg-primary/30"
+        >
+          Refresh
+        </button>
+      </div>
+    )
+  }
 
   const movies = await getSessionMovies(session.id)
   const swipes = await getUserSwipes(session.id)
@@ -27,7 +45,6 @@ export default async function SwipePage() {
     <SwipeClient
       session={session}
       movies={unswipedMovies}
-      userId={profile.id}
     />
   )
 }

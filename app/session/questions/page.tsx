@@ -13,14 +13,20 @@ export default async function QuizPage() {
   const session = await getActiveSession()
   if (!session) redirect('/dashboard')
 
+  // If session already completed, go to match results
+  if (session.status === 'completed') redirect('/session/match')
+  if (session.status === 'swiping') redirect('/session/match')
+
+  // For 'answering' and 'matching', render the client component
+  // The client component handles the 'matching' state with polling
   const { questions } = await getQuestions()
   if (!questions) redirect('/dashboard')
 
   return (
     <QuizClient
-      session={session}
+      sessionId={session.id}
+      sessionStatus={session.status}
       questions={questions}
-      userId={profile.id}
     />
   )
 }

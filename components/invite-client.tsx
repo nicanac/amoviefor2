@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { joinCouple } from '@/actions/couple'
+import { GlowingEffect } from '@/components/ui/glowing-effect'
 
 interface InviteClientProps {
   profile: {
@@ -80,26 +81,36 @@ export function InviteClient({ profile, couple }: InviteClientProps) {
           </div>
 
           {/* Your Code */}
-          <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 mb-6">
-            <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Your Partner Code</p>
-            <div className="flex items-center justify-between">
-              <p className="text-4xl font-bold text-white tracking-[0.3em] font-mono">
-                {profile.partner_code}
-              </p>
-              <button
-                onClick={handleCopy}
-                className="bg-primary/20 hover:bg-primary/30 p-3 rounded-xl transition-colors"
-              >
-                {copied ? (
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                  </svg>
-                )}
-              </button>
+          <div className="relative rounded-2xl border-[0.75px] border-border p-2 mb-6">
+            <GlowingEffect
+              spread={40}
+              glow={true}
+              disabled={false}
+              proximity={64}
+              inactiveZone={0.01}
+              borderWidth={3}
+            />
+            <div className="relative bg-white/5 backdrop-blur-md rounded-xl p-6 border-[0.75px] border-white/10">
+              <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Your Partner Code</p>
+              <div className="flex items-center justify-between">
+                <p className="text-4xl font-bold text-white tracking-[0.3em] font-mono">
+                  {profile.partner_code}
+                </p>
+                <button
+                  onClick={handleCopy}
+                  className="bg-primary/20 hover:bg-primary/30 p-3 rounded-xl transition-colors"
+                >
+                  {copied ? (
+                    <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -111,28 +122,38 @@ export function InviteClient({ profile, couple }: InviteClientProps) {
           </div>
 
           {/* Join with code */}
-          <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-            <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Enter Partner&apos;s Code</p>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={joinCode}
-                onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                maxLength={6}
-                placeholder="ABCDEF"
-                className="flex-1 h-14 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 text-center tracking-[0.3em] font-mono font-bold text-xl uppercase"
-              />
-              <button
-                onClick={handleJoin}
-                disabled={loading || joinCode.length < 6}
-                className="h-14 px-6 bg-primary hover:bg-primary/90 disabled:opacity-50 rounded-xl text-white font-bold transition-all"
-              >
-                {loading ? '...' : 'Join'}
-              </button>
+          <div className="relative rounded-2xl border-[0.75px] border-border p-2">
+            <GlowingEffect
+              spread={40}
+              glow={true}
+              disabled={false}
+              proximity={64}
+              inactiveZone={0.01}
+              borderWidth={3}
+            />
+            <div className="relative bg-white/5 backdrop-blur-md rounded-xl p-6 border-[0.75px] border-white/10">
+              <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Enter Partner&apos;s Code</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={joinCode}
+                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                  maxLength={6}
+                  placeholder="ABCDEF"
+                  className="flex-1 h-14 px-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 text-center tracking-[0.3em] font-mono font-bold text-xl uppercase"
+                />
+                <button
+                  onClick={handleJoin}
+                  disabled={loading || joinCode.length < 6}
+                  className="h-14 px-6 bg-primary hover:bg-primary/90 disabled:opacity-50 rounded-xl text-white font-bold transition-all"
+                >
+                  {loading ? '...' : 'Join'}
+                </button>
+              </div>
+              {error && (
+                <p className="text-sm text-red-400 mt-2">{error}</p>
+              )}
             </div>
-            {error && (
-              <p className="text-sm text-red-400 mt-2">{error}</p>
-            )}
           </div>
 
           {/* Waiting indicator */}

@@ -21,7 +21,8 @@ export type QuestionCategory =
   | "era"
   | "length"
   | "language"
-  | "rating";
+  | "rating"
+  | "platform";
 
 export type SwipeDirection = "right" | "left";
 
@@ -62,6 +63,7 @@ export interface QuestionOption {
   label: string;
   emoji?: string;
   tmdb_genre_id?: number;
+  provider_id?: number;
 }
 
 export interface Session {

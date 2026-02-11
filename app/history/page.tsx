@@ -1,5 +1,5 @@
 import { getProfile } from '@/actions/auth'
-import { getMatchHistory } from '@/actions/movies'
+import { getSessionHistory } from '@/actions/session'
 import { HistoryClient } from '@/components/history-client'
 import { ForceLogout } from '@/components/force-logout'
 
@@ -9,7 +9,7 @@ export default async function HistoryPage() {
     return <ForceLogout />
   }
 
-  const matches = await getMatchHistory()
+  const sessions = await getSessionHistory()
 
-  return <HistoryClient matches={matches} />
+  return <HistoryClient sessions={sessions} />
 }

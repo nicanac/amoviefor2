@@ -5,13 +5,7 @@ import { login } from '@/actions/auth'
 import { useActionState } from 'react'
 
 function LoginForm() {
-  const [state, formAction, pending] = useActionState(
-    async (_prev: { error: string } | null, formData: FormData) => {
-      const result = await login(formData)
-      return result ?? null
-    },
-    null
-  )
+  const [state, formAction, pending] = useActionState(login, null)
 
   return (
     <form action={formAction} className="space-y-4">

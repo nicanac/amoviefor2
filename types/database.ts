@@ -70,7 +70,7 @@ export type Database = {
           text: string;
           type: "single_choice" | "multi_choice" | "slider";
           options: Json;
-          category: "genre" | "mood" | "era" | "length" | "language" | "rating";
+          category: "genre" | "mood" | "era" | "length" | "language" | "rating" | "platform";
           weight: number;
           order: number;
         };
@@ -79,7 +79,7 @@ export type Database = {
           text: string;
           type: "single_choice" | "multi_choice" | "slider";
           options: Json;
-          category: "genre" | "mood" | "era" | "length" | "language" | "rating";
+          category: "genre" | "mood" | "era" | "length" | "language" | "rating" | "platform";
           weight: number;
           order: number;
         };
@@ -93,7 +93,8 @@ export type Database = {
             | "era"
             | "length"
             | "language"
-            | "rating";
+            | "rating"
+            | "platform";
           weight?: number;
           order?: number;
         };
@@ -276,7 +277,8 @@ export type Database = {
         | "era"
         | "length"
         | "language"
-        | "rating";
+        | "rating"
+        | "platform";
       swipe_direction: "right" | "left";
       seen_movie_source: "auto" | "manual";
     };

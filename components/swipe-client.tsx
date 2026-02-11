@@ -23,10 +23,9 @@ interface SessionMovie {
 interface SwipeClientProps {
   session: { id: string }
   movies: SessionMovie[]
-  userId: string
 }
 
-export function SwipeClient({ session, movies, userId }: SwipeClientProps) {
+export function SwipeClient({ session, movies }: SwipeClientProps) {
   const router = useRouter()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null)

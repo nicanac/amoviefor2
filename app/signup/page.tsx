@@ -5,13 +5,7 @@ import { signup } from '@/actions/auth'
 import { useActionState } from 'react'
 
 function SignupForm() {
-  const [state, formAction, pending] = useActionState(
-    async (_prev: { error: string } | null, formData: FormData) => {
-      const result = await signup(formData)
-      return result ?? null
-    },
-    null
-  )
+  const [state, formAction, pending] = useActionState(signup, null)
 
   return (
     <form action={formAction} className="space-y-4">

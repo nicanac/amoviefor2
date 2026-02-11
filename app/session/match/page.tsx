@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getProfile } from '@/actions/auth'
-import { getActiveSession, getSessionMovies } from '@/actions/session'
-import { getSessionMatches } from '@/actions/swipe'
+import { getActiveSession, getSessionMovies, getLastCompletedSession } from '@/actions/session'
 import { MatchResultClient } from '@/components/match-result-client'
 import { ForceLogout } from '@/components/force-logout'
 
@@ -11,18 +10,24 @@ export default async function MatchPage() {
     return <ForceLogout />
   }
 
-  const session = await getActiveSession()
-  // Also check for most recent completed session
+  let session = await getActiveSession()
+  // Also check for most recent completed session if no active one
+  if (!session) {
+    session = await getLastCompletedSession()
+  }
+
   if (!session) redirect('/dashboard')
 
-  const matches = await getSessionMatches(session.id)
+  // With swiping disabled, just show all generated movies as "matches"/results
+  // const matches = await getSessionMatches(session.id)
   const movies = await getSessionMovies(session.id)
 
-  // Get matched movies with full data
-  const matchedMovies = matches.map(match => {
-    const raw = movies.find(m => m.id === match.session_movie_id)
-    if (!raw) return { ...match, movie: undefined }
-    const movie = {
+  const results = movies.map(raw => ({
+    id: raw.id, // Using the movie ID as match ID for UI uniqueness
+    session_id: session.id,
+    session_movie_id: raw.id,
+    matched_at: new Date().toISOString(), // Mock matched time
+    movie: {
       id: raw.id,
       tmdb_id: raw.tmdb_id,
       title: raw.title,
@@ -34,13 +39,13 @@ export default async function MatchPage() {
       match_score: raw.match_score,
       rank: raw.rank,
     }
-    return { ...match, movie }
-  }).filter(m => m.movie)
+  }))
 
   return (
     <MatchResultClient
-      matches={matchedMovies}
+      matches={results}
       sessionId={session.id}
+      coupleId={session.couple_id}
     />
   )
 }

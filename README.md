@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎬 amoviefor2
+> A mobile-first web app for couples to find the perfect movie to watch tonight.
 
-## Getting Started
+## Not Another Endless scroll
+Stop spending 45 minutes scrolling through Netflix. **amoviefor2** streamlines the decision process:
+1. **Couple Up**: Share a 6-character code with your partner.
+2. **Quiz**: Answer 5 quick questions about your mood (Vibe, Era, Rating, Language, Genre).
+3. **Match**: Get instant, tailored recommendations that fit BOTH your tastes.
+4. **Watch**: Pick a movie and enjoy.
 
-First, run the development server:
+**Note:** The swiping phase has been removed in favor of a direct "Best Matches" list to get you to your movie faster.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
+Built with the **B.L.A.S.T.** protocol and **A.N.T.** architecture.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: [Next.js 16.1](https://nextjs.org/) (App Router, Server Actions)
+- **Database**: [Supabase](https://supabase.com/) (Postgres, Auth, Realtime, RLS)
+- **Movie Data**: [TMDB API](https://www.themoviedb.org/documentation/api)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Validation**: [Zod](https://zod.dev/)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Getting Started
 
-## Learn More
+1. **Clone & Install**
+   ```bash
+   git clone https://github.com/nicanac/amoviefor2.git
+   cd amoviefor2
+   npm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Environment Setup**
+   Copy `.env.local.example` to `.env.local` and add your keys:
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+   SUPABASE_SERVICE_ROLE_KEY=...
+   TMDB_API_KEY=...
+   TMDB_ACCESS_TOKEN=... (optional)
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Run Development Server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Project Structure (A.N.T.)
 
-## Deploy on Vercel
+- **Layer 1: Architecture** (`.vibe/`) - SOPs, schemas, logs.
+- **Layer 2: Navigation** (`app/`, `actions/`) - Routes and server logic.
+- **Layer 3: Tools** (`tools/`, `lib/`) - Atomic utilities and scripts.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🤝 Contributing
+1. Create a feature branch (`feat/amazing-feature`).
+2. Commit changes using conventional commits (`feat: add amazing feature`).
+3. Push to branch and open a PR.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Created by [Antigravity](https://github.com/google-deepmind/antigravity)*

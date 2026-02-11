@@ -19,6 +19,15 @@ export interface TMDBMovie {
   video: boolean;
 }
 
+export interface TMDBVideo {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+}
+
 export interface TMDBMovieDetail extends Omit<TMDBMovie, "genre_ids"> {
   genres: TMDBGenre[];
   runtime: number | null;
@@ -30,6 +39,7 @@ export interface TMDBMovieDetail extends Omit<TMDBMovie, "genre_ids"> {
   homepage: string | null;
   production_companies: TMDBProductionCompany[];
   spoken_languages: TMDBSpokenLanguage[];
+  videos?: { results: TMDBVideo[] };
 }
 
 export interface TMDBGenre {
@@ -73,6 +83,8 @@ export interface TMDBDiscoverFilters {
   with_original_language?: string;
   "with_runtime.gte"?: number;
   "with_runtime.lte"?: number;
+  with_watch_providers?: string; // pipe-separated provider IDs
+  watch_region?: string; // ISO 3166-1 country code
   sort_by?: string; // e.g. 'popularity.desc'
   page?: number;
   include_adult?: boolean;

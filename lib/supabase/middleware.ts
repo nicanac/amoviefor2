@@ -42,9 +42,13 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith("/history");
 
   if (!user && isProtectedRoute) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+    // Only redirect on GET requests (navigation).
+    // Let Server Actions (POST) pass through; they will handle their own auth checks/redirects.
+    if (request.method === "GET") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/login";
+      return NextResponse.redirect(url);
+    }
   }
 
   // If logged in and hitting /login, redirect to dashboard
@@ -53,9 +57,12 @@ export async function updateSession(request: NextRequest) {
     (request.nextUrl.pathname === "/login" ||
       request.nextUrl.pathname === "/signup")
   ) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
+    // Only redirect on GET requests
+    if (request.method === "GET") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/dashboard";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

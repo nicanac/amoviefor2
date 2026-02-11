@@ -6,11 +6,19 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import {
+  markAsSeenSchema,
+  removeFromSeenSchema,
+  validate,
+} from "@/lib/validations";
 
 export async function markAsSeen(
   tmdbId: number,
   source: "auto" | "manual" = "manual",
 ) {
+  const validated = validate(markAsSeenSchema, { tmdbId, source });
+  if ("error" in validated) return { error: validated.error };
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -34,6 +42,9 @@ export async function markAsSeen(
 }
 
 export async function removeFromSeen(tmdbId: number) {
+  const validated = validate(removeFromSeenSchema, { tmdbId });
+  if ("error" in validated) return { error: validated.error };
+
   const supabase = await createClient();
   const {
     data: { user },

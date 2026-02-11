@@ -6,12 +6,20 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { recordSwipeSchema, validate } from "@/lib/validations";
 
 export async function recordSwipe(
   sessionId: string,
   sessionMovieId: string,
   direction: "right" | "left",
 ) {
+  const validated = validate(recordSwipeSchema, {
+    sessionId,
+    sessionMovieId,
+    direction,
+  });
+  if ("error" in validated) return { error: validated.error };
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -48,7 +56,8 @@ async function checkForMatch(
   sessionMovieId: string,
   currentUserId: string,
 ) {
-  const supabase = await createClient();
+  // Use Service Role to check partner's swipe (bypass RLS)
+  const supabase = await createClient(true);
 
   // Get the session's couple to find partner
   const { data: session } = await supabase

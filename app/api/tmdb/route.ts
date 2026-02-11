@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { discoverMovies, getMovieDetail, getGenres } from "@/lib/tmdb";
+import {
+  discoverMovies,
+  getMovieDetail,
+  getGenres,
+  getMovieWatchProviders,
+} from "@/lib/tmdb";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -27,6 +32,14 @@ export async function GET(request: NextRequest) {
       case "genres": {
         const genres = await getGenres();
         return NextResponse.json({ genres });
+      }
+
+      case "providers": {
+        const movieId = searchParams.get("id");
+        if (!movieId)
+          return NextResponse.json({ error: "Missing id" }, { status: 400 });
+        const providers = await getMovieWatchProviders(parseInt(movieId));
+        return NextResponse.json(providers);
       }
 
       default:

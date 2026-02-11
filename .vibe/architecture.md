@@ -51,8 +51,8 @@ amoviefor2/
 │   │   ├── session/
 │   │   │   ├── questions/page.tsx  # Question flow
 │   │   │   ├── waiting/page.tsx    # Wait for partner
-│   │   │   ├── swipe/page.tsx      # Swipe interface
-│   │   │   └── match/page.tsx      # Match celebration
+│   │   │   ├── swipe/page.tsx      # (Unused) Swipe interface
+│   │   │   └── match/page.tsx      # Match celebration / Results
 │   │   └── history/page.tsx    # Past matches & seen movies
 │   └── api/                    # API routes (if needed)
 │       └── tmdb/route.ts       # TMDB proxy (hides API key)
@@ -61,10 +61,11 @@ amoviefor2/
 │   ├── couple.ts
 │   ├── session.ts
 │   ├── swipe.ts
-│   └── movies.ts
+│   ├── movies.ts
+│   └── admin.ts                # (New) Admin/Fix actions
 ├── components/                 # Shared UI components
 │   ├── ui/                     # Primitives (Button, Card, Input)
-│   ├── swipe-card.tsx          # Movie swipe card with gestures
+│   ├── swipe-card.tsx          # (Unused) Movie swipe card
 │   ├── question-card.tsx       # Question display component
 │   ├── movie-poster.tsx        # TMDB poster with fallback
 │   └── match-celebration.tsx   # Match animation overlay
@@ -75,26 +76,19 @@ amoviefor2/
 │   │   └── middleware.ts       # Auth middleware helper
 │   ├── tmdb.ts                 # TMDB API client
 │   ├── scoring.ts              # Match score algorithm
+│   ├── logger.ts               # Self-annealing logger
+│   ├── validations.ts          # Zod schemas
 │   └── utils.ts                # Generic helpers
 ├── tools/                      # Layer 3: Verification & scripts
-│   ├── verify-supabase.ts      # Handshake test
-│   ├── verify-tmdb.ts          # Handshake test
-│   └── seed-questions.ts       # Seed question bank
+│   ├── verify-env.ts           # Environment guard
+│   ├── check-rls.sql           # RLS Policy check script
+│   └── fix-matches.ts          # Match correction script
 ├── types/                      # TypeScript type definitions
 │   ├── database.ts             # Supabase generated types
 │   ├── tmdb.ts                 # TMDB API types
 │   └── domain.ts               # App-level enums & types
 ├── supabase/
 │   └── migrations/             # SQL migrations
-│       ├── 001_profiles.sql
-│       ├── 002_couples.sql
-│       ├── 003_questions.sql
-│       ├── 004_sessions.sql
-│       ├── 005_user_answers.sql
-│       ├── 006_session_movies.sql
-│       ├── 007_swipes.sql
-│       ├── 008_matches.sql
-│       └── 009_seen_movies.sql
 ├── public/                     # Static assets
 ├── .env.local                  # Secrets (never committed)
 ├── middleware.ts                # Next.js middleware (auth guard)
@@ -155,7 +149,7 @@ FLOW:
   4. SCORE each movie against combined profile → match_score (0.0–1.0)
   5. FILTER OUT movies in seen_movies for EITHER user
   6. SELECT top N movies (minimum 3), INSERT into session_movies
-  7. SET session.status = 'swiping'
+  7. SET session.status = 'completed' (Skip Swiping)
 GUARDS:
   - Must have ≥ 3 movies after filtering. If not, relax filters and retry.
   - All seen_movies for both users must be excluded.
@@ -164,40 +158,32 @@ FALLBACK:
   - If still < 3 → include popular movies as filler, flag as "wildcard"
 ```
 
-### SOP-004: Swipe Session
+### SOP-004: Swipe Session (DISABLED)
 ```
-TRIGGER: Session status becomes 'swiping'
-FLOW:
+NOTE: Swiping phase is currently disabled. The app transitions directly from Matching to Result.
+
+TRIGGER: Session status becomes 'swiping' (Currently bypassed)
+FLOW (Legacy/Future):
   1. FETCH session_movies ordered by rank
   2. Display movies as swipeable cards (mobile touch gestures)
   3. User swipes right (want) or left (pass)
   4. INSERT swipe record
-  5. User can tap "Already Seen" → INSERT into seen_movies (source: manual)
-     → REMOVE movie from their swipe deck
-  6. After each right-swipe → CHECK if partner also swiped right
+  5. After each right-swipe → CHECK if partner also swiped right
      a. If YES → CREATE match → SOP-005
-     b. If NO → continue swiping
-  7. When user finishes all cards → show "Waiting for partner" if no match yet
-GUARDS:
-  - Cannot see partner's swipes until both done or match found
-  - One swipe per movie per user (idempotent)
-REALTIME:
-  - Subscribe to matches table → instant match notification
+  6. When user finishes all cards → show "Waiting for partner" if no match yet
 ```
 
 ### SOP-005: Match & Result
 ```
-TRIGGER: Both users swiped right on the same movie
+TRIGGER: Session status is 'completed'
 FLOW:
-  1. INSERT into matches table
-  2. SET session.status = 'completed'
-  3. NOTIFY both users via Realtime
-  4. Display celebration animation with movie details
-  5. Option: "Mark as Watched" → INSERT into seen_movies (source: auto)
-  6. Option: "Start New Session" → back to SOP-002
+  1. FETCH session_movies (Generated in SOP-003)
+  2. Display all recommended movies as "Matches"
+  3. Option: "Mark as Watched" → INSERT into seen_movies (source: auto)
+  4. Option: "Clear Session" → DELETE session (or archive) to start over
+  5. Option: "Change Partner" → Dissolve couple (if needed)
 GUARDS:
-  - Match requires BOTH users swiped right (verified server-side)
-  - If multiple matches in same session → show all, user picks one
+  - Movies are shown ranked by match_score
 ```
 
 ---
@@ -225,16 +211,13 @@ middleware.ts:
          │  ┌──────────────┐  │
          └─▶│   MATCHING   │◀─┘
             └──────┬───────┘
+                   │
+                   │ (swiping bypassed)
                    ▼
             ┌──────────────┐
-            │   SWIPING    │
-            └──────┬───────┘
-                   ▼
-         ┌─────────────────┐
-         │ match found?    │
-         │  YES → COMPLETED│
-         │  NO  → EXPIRED  │ (after 24h)
-         └─────────────────┘
+            │  COMPLETED   │
+            │ (Show List)  │
+            └──────────────┘
 ```
 
 ### Realtime Subscriptions
@@ -250,18 +233,23 @@ Events:
 
 ## Layer 3: Tools (Deterministic Scripts)
 
-| Tool                    | File                  | Input                         | Output                    | Atomic? |
-|-------------------------|-----------------------|-------------------------------|---------------------------|---------|
-| Verify Supabase         | tools/verify-supabase | env vars                      | connection OK/FAIL        | ✅      |
-| Verify TMDB             | tools/verify-tmdb     | env vars                      | API key valid OK/FAIL     | ✅      |
-| Seed Questions          | tools/seed-questions  | questions JSON                | DB seeded                 | ✅      |
-| Score Movies            | lib/scoring.ts        | user1_answers, user2_answers  | scored movie list         | ✅      |
-| TMDB Search             | lib/tmdb.ts           | filters (genre, year, etc.)   | movie array               | ✅      |
-| Generate Partner Code   | lib/utils.ts          | none                          | 6-char unique string      | ✅      |
+| Tool                    | File                       | Input                         | Output                    | Atomic? |
+|-------------------------|----------------------------|-------------------------------|---------------------------|---------|
+| Verify Environment      | tools/verify-env.ts        | process.env                   | missing/invalid report    | ✅      |
+| Check RLS Policies      | tools/check-rls.sql        | SQL                           | Policy Status             | ✅      |
+| Fix/Check Matches       | tools/fix-matches.ts       | session_id                    | match repair              | ✅      |
+| Score Movies            | lib/scoring.ts             | user1_answers, user2_answers  | scored movie list         | ✅      |
+| TMDB Search             | lib/tmdb.ts                | filters (genre, year, etc.)   | movie array               | ✅      |
+| Generate Partner Code   | lib/utils.ts               | none                          | 6-char unique string      | ✅      |
+| Self-Annealing Logger   | lib/logger.ts              | phase, action, error, context | logbook.json entry        | ✅      |
+| Zod Validation          | lib/validations.ts         | schema + unknown data         | typed data or error       | ✅      |
+| Realtime Hook           | lib/use-realtime-session.ts| sessionId, userId, callbacks  | subscribed channel        | ✅      |
 
 ---
 
 ## Self-Annealing Protocol
+
+> **Implementation:** `lib/logger.ts` — `logError()`, `logResolution()`, `withTracing()`
 
 ```
 ON ERROR:
