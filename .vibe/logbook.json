@@ -249,6 +249,14 @@
         "Weights redistributed: Genre 0.30, Mood 0.20."
       ],
       "status": "complete"
+    },
+    {
+      "id": 22,
+      "timestamp": "2026-02-11T18:05:00Z",
+      "phase": "4-refinement",
+      "action": "FIX_LOGGER",
+      "description": "Fixed Vercel EROFS error by disabling filesystem writes in production. Added console logging for observability.",
+      "status": "complete"
     }
   ]
 }

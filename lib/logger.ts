@@ -38,14 +38,24 @@ interface Logbook {
 // --- Constants ---
 
 const LOGBOOK_PATH = path.join(process.cwd(), ".vibe", "logbook.json");
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
 // --- Core Functions ---
 
 /**
  * Read the current logbook from disk.
  * Returns a default structure if the file is missing or corrupt.
+ * In production, returns an empty logbook to avoid filesystem access.
  */
 async function readLogbook(): Promise<Logbook> {
+  if (IS_PRODUCTION) {
+    return {
+      project: "amoviefor2",
+      created: new Date().toISOString().split("T")[0],
+      entries: [],
+    };
+  }
+
   try {
     const raw = await readFile(LOGBOOK_PATH, "utf-8");
     return JSON.parse(raw) as Logbook;
@@ -60,8 +70,15 @@ async function readLogbook(): Promise<Logbook> {
 
 /**
  * Write the logbook back to disk (pretty-printed for AI readability).
+ * In production, this is a no-op to prevent EROFS errors.
  */
 async function writeLogbook(logbook: Logbook): Promise<void> {
+  if (IS_PRODUCTION) {
+    // In production, we don't write to the filesystem.
+    // We rely on console logs which Vercel captures.
+    return;
+  }
+
   await writeFile(
     LOGBOOK_PATH,
     JSON.stringify(logbook, null, 2) + "\n",
@@ -102,6 +119,11 @@ export async function logEntry(
 
   logbook.entries.push(entry);
   await writeLogbook(logbook);
+
+  if (IS_PRODUCTION) {
+    console.log(`[Self-Annealing] ${phase}/${action}: ${description}`);
+  }
+
   return entry;
 }
 
@@ -181,6 +203,10 @@ export async function logResolution(
   });
 
   await writeLogbook(logbook);
+
+  if (IS_PRODUCTION) {
+    console.log(`[Self-Annealing] RESOLVED_${errorEntry?.action}: ${resolution}`);
+  }
 }
 
 /**
